@@ -1,0 +1,16 @@
+{
+	"content_scripts": [
+		{
+			"js": ["res/scripts/app.min.js"],
+			"matches": ["*://*.ikariam.gameforge.com/*"]
+		}
+	],
+	"description": "Provides additional functionality for the Ikariam browser game.",
+	"icons": {
+		"48": "src/images/icons/app-48.png",
+		"64": "src/images/icons/app-64.png"
+	},
+	"manifest_version": 2,
+	"name": "Ikariam",
+	"version": "0.1"
+}
