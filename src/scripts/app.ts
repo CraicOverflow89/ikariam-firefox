@@ -13,6 +13,7 @@ console.log("Ikariam application running...")
 
 // Hide Event Promotion
 document.getElementById("eventDiv").style.display = "none"
+// NOTE: could remove this if event that does the timer is also removed
 
 // City View
 if(window.location.href.indexOf("view=city") > -1) {
@@ -22,119 +23,82 @@ if(window.location.href.indexOf("view=city") > -1) {
 
 	// Remove Footer Controls
 	document.getElementById("mapControls").remove()
+	document.getElementById("js_toggleControlsOn").style.cursor = "default"
 }
 
-// Test Callout
-document.body.appendChild((() => {
+// Create Callout
+document.body.appendChild(Factory.div((it) => {
 
-	// Create View
-	const view = document.createElement("div")
-	view.className = "templateView focusable focus"
-	view.setAttribute("style", "bottom: 25px; left: 25px; position: absolute; right: auto;")
+	// Element Properties
+	it.className = "templateView focusable focus"
+	it.setAttribute("style", "bottom: 25px; left: 25px; position: absolute; right: auto;")
 	// NOTE: need to add click, focusElement and mouseup events
-	view.appendChild((() => {
 
-		// Create Element
-		const callout = document.createElement("div")
+	// Element Content
+	it.appendChild(Factory.div((callout) => {
+
+		// Element Properties
 		callout.className = "mainContentBox contentBox01h toggleMenu"
 
-		// Append Header
-		callout.appendChild((() => {
-			const header = document.createElement("div")
-			header.className = "hd header mainHeader draggable"
-			header.appendChild((() => {
-				const result = document.createElement("h3")
-				result.innerHTML = "Ikariam Extension"
-				return result
-			})())
-			header.appendChild((() => {
-				const result = document.createElement("div")
-				result.className = "close"
-				result.addEventListener("click", () => {
+		// Create Header
+		callout.appendChild(Factory.div((it) => {
+			it.className = "hd header mainHeader draggable"
+			it.appendChild(Factory.h(3, "Ikariam Extension"))
+			it.appendChild(Factory.div((it) => {
+				it.className = "close"
+				it.addEventListener("click", () => {
 					callout.remove()
 					//ikariam.destroyCurrentView();
 					//ikariam.controller.resetSliders();
 				})
-				return result
-			})())
-			// NOTE: this close button is not appearing atm
-			return header
-		})())
+			}))
+		}))
 
-		// Append Content
-		callout.appendChild((() => {
-			const content = document.createElement("div")
-			content.className = "bd mainContentScroll"
-			content.setAttribute("style", "height: 120px;")
-			content.appendChild((() => {
-				const result = document.createElement("div")
-				result.className = "scroll_area"
+		// Create Content
+		callout.appendChild(Factory.div((it) => {
+			it.className = "bd mainContentScroll"
+			it.setAttribute("style", "height: 120px;")
+			it.appendChild(Factory.div((it) => {
+				it.className = "scroll_area"
 				// NOTE: need to add the mousedown and mouseup events
-				result.appendChild((() => {
-					const result = document.createElement("div")
-					result.className = "scroll_arrow_top"
+				it.appendChild(Factory.div((it) => {
+					it.className = "scroll_arrow_top"
 					// NOTE: need to add the mousedown and mouseup events
-					return result
-				})())
-				result.appendChild((() => {
-					const result = document.createElement("div")
-					result.className = "scroller"
-					result.setAttribute("style", "height: 183px; left: 0px; top: 0px; width: 16px;")
+				}))
+				it.appendChild(Factory.div((it) => {
+					it.className = "scroller"
+					it.setAttribute("style", "height: 183px; left: 0px; top: 0px; width: 16px;")
 					// NOTE: need to add the mousedown event
-					return result
-				})())
-				result.appendChild((() => {
-					const result = document.createElement("div")
-					result.className = "scroll_arrow_bottom"
-					result.setAttribute("style", "top: 221px;")
+				}))
+				it.appendChild(Factory.div((it) => {
+					it.className = "scroll_arrow_bottom"
+					it.setAttribute("style", "top: 221px;")
 					// NOTE: need to add the mousedown and mouseup events
-					return result
-				})())
-				return result
-			})())
-			content.appendChild((() => {
-				const result = document.createElement("div")
-				result.className = "mainContent minimizableContent"
+				}))
+			}))
+			it.appendChild(Factory.div((it) => {
+				it.className = "mainContent minimizableContent"
 				// NOTE: need to add the mousescroll and mousewheel events
-				result.appendChild((() => {
-					const result = document.createElement("div")
-					result.className = "contentBox01h"
-					result.appendChild((() => {
-						const result = document.createElement("h3")
-						result.className = "header"
+				it.appendChild(Factory.div((it) => {
+					it.className = "contentBox01h"
+					it.appendChild(Factory.h(3, "", () => {
+						it.className = "header"
 						// NOTE: need <a> and <span> elements here
-						return result
-					})())
-					result.appendChild((() => {
-						const result = document.createElement("div")
-						result.className = "content"
-						result.innerHTML = "TEMP CONTENT"
-						return result
-					})())
-					result.appendChild((() => {
-						const result = document.createElement("div")
-						result.className = "footer"
-						return result
-					})())
-					return result
-				})())
-				return result
-			})())
-			return content
-		})())
+					}))
+					it.appendChild(Factory.div((it) => {
+						it.className = "content"
+						it.innerHTML = "TEMP CONTENT"
+					}))
+					it.appendChild(Factory.div((it) => {
+						it.className = "footer"
+					}))
+				}))
+			}))
+		}))
 
-		// Append Footer
-		callout.appendChild((() => {
-			const footer = document.createElement("div")
-			footer.className = "ft footer"
-			return footer
-		})())
-
-		// Return Element
-		return callout
-	})())
-
-	// Return Element
-	return view
-	
-})())
+		// Create Footer
+		callout.appendChild(Factory.div((it) => {
+			it.className = "ft footer"
+		}))
+	}))
+}))
