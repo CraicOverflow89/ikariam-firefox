@@ -3,6 +3,6 @@
 		"removeComments": true
 	},
 	"include": [
-		"src/scripts/content.ts"
+		"src/scripts/app.ts"
 	]
 }
