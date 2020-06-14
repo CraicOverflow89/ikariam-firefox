@@ -355,7 +355,64 @@ class Integer extends Number {
 		super(value)
 	}
 }
-type int = Integer
+type int = Integer;
+
+// Create Debugger
+// NOTE: object that can be posted to and renders in a modal/popup
+const Debug = (() => {
+
+	// Active Status
+	let isActive = true
+
+	// Create Elements
+	const input = Factory.span((it) => {
+		it.setAttribute("style", "color: rgba(0, 200, 0); font-family: monospace;")
+	})
+	Factory.div((root) => {
+		root.setAttribute("style", "color: rgba(0, 200, 0); font-family: monospace; height: 200px; left: 10px; padding: 5px; position: absolute; top: 50px; width: 300px; z-index: 99;")
+		root.appendChild(Factory.table((it) => {
+			it.appendChild(Factory.tr((it) => {
+				it.vAlign = "top"
+				it.style.height = "20px"
+				it.appendChild(Factory.td((it) => {
+					it.innerHTML = "Debug"
+				}))
+				it.appendChild(Factory.td((it) => {
+					it.align = "center"
+					it.vAlign = "middle"
+					it.width = "20px"
+					it.innerHTML = "x"
+					it.addEventListener("click", () => {
+						isActive = false
+						root.remove()
+					})
+				}))
+			}))
+			it.appendChild(Factory.tr((it) => {
+				it.vAlign = "top"
+				it.appendChild(Factory.td((it) => {
+					it.colSpan = 2
+					it.setAttribute("style", "border-top: 1px solid rgba(0, 200, 0);")
+					it.appendChild(input)
+				}))
+			}))
+		}, (it) => it.setAttribute("style", "background-color: rgba(0, 0, 0, 0.75); border: 1px solid rgba(0, 200, 0); height: 100%; width: 100%;")))
+		document.body.appendChild(root)
+	})
+
+	// Return Methods
+	return {
+		"clear": () => {
+			if(!isActive) return;
+			input.innerHTML = ""
+		},
+		"isActive": () => isActive,
+		"print": (data: any) => {
+			if(!isActive) return;
+			input.innerHTML += (typeof data == "string" ? data : JSON.stringify(data)) + "<br>"
+		}
+	}
+})()
 
 // Create Definitions
 interface Ikariam {
@@ -413,16 +470,16 @@ if(window.location.href.indexOf("view=city") > -1) {
 	document.getElementById("mapControls").remove()
 	document.getElementById("js_toggleControlsOn").style.cursor = "default"
 }
+// NOTE: should access page data to determine if city view
 
 // List Cities
 // NOTE: let's get a list of cities and coords for player
-console.log("list cities?")
 const tempCity = ikariam.model.relatedCityData.let((it) => {
 	return it[it["selectedCity"]].let((it) => {
 		return new IkariamCity(it.id, it.name)
 	})
 })
-console.log(tempCity)
+//alert(JSON.stringify(tempCity))
 
 // Create Callout
 /*document.body.appendChild(Factory.div((it) => {
