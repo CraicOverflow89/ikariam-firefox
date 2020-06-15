@@ -356,7 +356,7 @@ class Integer extends Number {
 		super(value)
 	}
 }
-type int = Integer;
+type int = Integer
 
 // Create Debugger
 // NOTE: object that can be posted to and renders in a modal/popup
@@ -416,7 +416,7 @@ type int = Integer;
 })()*/
 
 // Create Definitions
-interface Ikariam {
+/*interface Ikariam {
 	controller: IkariamController
 	destroyCurrentView(): void
 	model: IkariamModel
@@ -426,10 +426,9 @@ interface IkariamController {
 }
 interface IkariamModel {
 	relatedCityData: Object
-}
-declare const ikariam: Ikariam;
+}*/
 
-class IkariamCity {
+/*class IkariamCity {
 	id: number
 	name: string
 
@@ -441,7 +440,37 @@ class IkariamCity {
 	getTroops() {
 		// NOTE: return data like {hoplite: number}
 	}
+}*/
+
+/*class IkariamView {
+	cityLeftMenu: IkariamViewSideMenu
+	constructionListEnd: any
+	constructionListStart: any
+	constructionListState: any
+	currentCityId: number
+	endUpgradeTime: number
+	startUpgradeTime: number
+	underConstructor: number
 }
+
+interface IkariamViewSideMenu {
+	ownCity: number
+	visibility: IkariamViewSideMenuVisibility
+}
+
+interface IkariamViewSideMenuVisibility {
+	espionage: number
+	military: number
+	resourceShop: number
+	slot1: number
+	slot2: number
+	slot3: number
+	slot4: number
+}*/
+
+// Declare Constants
+//declare const ikariam: Ikariam
+//declare const bgViewData: IkariamView
 
 // Console Logic
 /*console = (() => {
@@ -452,12 +481,6 @@ class IkariamCity {
 	document.body.removeChild(iFrame)
 	return result
 })()*/
-
-// Execute Application
-//console.log("Ikariam application running...")
-// NOTE: this is still not working, despite console changes
-
-// NOTE: for general data, see window.ikariam.model
 
 // Mutation Logic
 const mutationData = (() => {
@@ -495,25 +518,73 @@ const mutationData = (() => {
 	}
 })()
 
+// Parse View
+const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
+// NOTE: is this not available in window data? could this at least use an enum?
+
 // Hide Event Promotion
 document.getElementById("eventDiv").style.display = "none"
 // NOTE: could remove this if event that does the timer is also removed
 
-// Parse View
-const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
-
 // City View
 if(viewType == "city") {
 
-	// Remove Left Menu
-	document.getElementById("js_viewCityMenu").remove()
+	// Side Menu
+	//document.getElementById("js_viewCityMenu").remove()
 	// NOTE: see window.bgViewData.cityLeftMenu.visibility
+	//       updating that object (setting elements to 0) does NOT prevent them from appearing again on a timer
+	/*(<HTMLUListElement>document.getElementById("js_viewCityMenu").getElementsByClassName("menu_slots")[0]).apply((it) => {
 
-	// Remove Footer Controls
+		// Update Visibility
+		bgViewData.cityLeftMenu.visibility = {
+			"espionage": 0,
+			"military": 1,
+			"resourceShop": 0,
+			"slot1": 0,
+			"slot2": 0,
+			"slot3": 1,
+			"slot4": 1
+		}
+
+		// Remove Items
+		;[
+			"resourceShop",
+			"slot1",
+			"slot2"
+		].forEach(className => {
+			it.getElementsByClassName(className)[0].setAttribute("style", "display: none;")
+		})
+
+		// Append Options
+		it.appendChild(Factory.li((it) => {
+
+			// Element Properties
+			it.className = "expandable extensionOptions"
+			it.setAttribute("style", "display: inline-block; width: 53px;")
+
+			// Element Content
+			it.appendChild(Factory.div((it) => {
+				it.className = "image"
+				it.setAttribute("style", "background-position: 0px -1020px")
+				// NOTE: use a custom image here later
+			}))
+			it.appendChild(Factory.div((it) => {
+				it.className = "name"
+				it.appendChild(Factory.span((it) => {
+					it.className = "namebox"
+					it.innerHTML = "Extension Options"
+				}))
+			}))
+
+			// Element Events
+			it.addEventListener("click", () => alert("Extension Options"))
+		}))
+	})*/
+
+	// Footer Controls
 	document.getElementById("mapControls").remove()
 	document.getElementById("js_toggleControlsOn").style.cursor = "default"
 }
-// NOTE: should access page data to determine if city view
 
 // Island View
 if(viewType == "island") {
@@ -522,7 +593,7 @@ if(viewType == "island") {
 	const resourceUpdate = () => {
 
 		// Update View
-		(<HTMLElement>document.getElementById("setWorkersBox").getElementsByClassName("content")[0]).apply((it) => {
+		(<HTMLDivElement>document.getElementById("setWorkersBox").getElementsByClassName("content")[0]).apply((it) => {
 			it.setAttribute("style", "min-height: 0px;")
 			it.getElementsByClassName("premiumOfferBox")[0].remove()
 			// NOTE: overall height might need to be reduced here
@@ -545,8 +616,8 @@ if(viewType == "island") {
 		const shipAmount = Math.ceil(resourceAmount / 500)
 
 		// Update View
-		document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 220px;");
-		(<HTMLElement>document.getElementsByClassName("barbarianCityResources")[0]).apply((it) => {
+		document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 220px;")
+		;(<HTMLDivElement>document.getElementsByClassName("barbarianCityResources")[0]).apply((it) => {
 			it.appendChild(Factory.br())
 			it.appendChild(Factory.div((it) => {
 				it.innerHTML = "Resource Transport:"
@@ -598,8 +669,8 @@ if(viewType == "island") {
 				it.className = "close"
 				it.addEventListener("click", () => {
 					callout.remove()
-					//ikariam.destroyCurrentView();
-					//ikariam.controller.resetSliders();
+					//ikariam.destroyCurrentView()
+					//ikariam.controller.resetSliders()
 				})
 			}))
 		}))
