@@ -495,47 +495,15 @@ const mutationData = (() => {
 	}
 })()
 
-// Barbarian Village
-mutationData.onElementAdd("barbarianVillage", (it) => {
-
-	// Calculate Resources
-	const resourceAmount = [
-		"js_islandBarbarianResourceresource",
-		"js_islandBarbarianResourcetradegood1",
-		"js_islandBarbarianResourcetradegood2",
-		"js_islandBarbarianResourcetradegood3",
-		"js_islandBarbarianResourcetradegood4"
-	].reduce((result, it) => result + parseInt(document.getElementById(it).innerHTML), 0)
-	const shipAmount = Math.ceil(resourceAmount / 500)
-
-	// Update View
-	document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 220px;");
-	(<HTMLElement>document.getElementsByClassName("barbarianCityResources")[0]).apply((it) => {
-		it.appendChild(Factory.br())
-		it.appendChild(Factory.div((it) => {
-			it.innerHTML = "Resource Transport:"
-		}))
-		it.appendChild(Factory.ul((it) => {
-			it.className = "resources"
-			it.setAttribute("style", "height: 25px;")
-			it.appendChild(Factory.li((it) => {
-				it.setAttribute("style", 'background: url("skin/wonder/multi_marble.png") no-repeat left center;')
-				it.innerHTML = resourceAmount.toString()
-			}))
-			it.appendChild(Factory.li((it) => {
-				it.setAttribute("style", 'background: url("skin/characters/fleet/40x40/ship_transport_r_40x40.png") no-repeat left center; background-size: 20px;')
-				it.innerHTML = shipAmount.toString()
-			}))
-		}))
-	})
-})
-
 // Hide Event Promotion
 document.getElementById("eventDiv").style.display = "none"
 // NOTE: could remove this if event that does the timer is also removed
 
+// Parse View
+const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
+
 // City View
-if(window.location.href.indexOf("view=city") > -1) {
+if(viewType == "city") {
 
 	// Remove Left Menu
 	document.getElementById("js_viewCityMenu").remove()
@@ -546,6 +514,58 @@ if(window.location.href.indexOf("view=city") > -1) {
 	document.getElementById("js_toggleControlsOn").style.cursor = "default"
 }
 // NOTE: should access page data to determine if city view
+
+// Island View
+if(viewType == "island") {
+
+	// Resource Deposit
+	const resourceUpdate = () => {
+
+		// Update View
+		(<HTMLElement>document.getElementById("setWorkersBox").getElementsByClassName("content")[0]).apply((it) => {
+			it.setAttribute("style", "min-height: 0px;")
+			it.getElementsByClassName("premiumOfferBox")[0].remove()
+			// NOTE: overall height might need to be reduced here
+		})
+	}
+	mutationData.onElementAdd("resource", resourceUpdate)
+	mutationData.onElementAdd("tradegood", resourceUpdate)
+
+	// Barbarian Village
+	mutationData.onElementAdd("barbarianVillage", (it) => {
+
+		// Calculate Resources
+		const resourceAmount = [
+			"js_islandBarbarianResourceresource",
+			"js_islandBarbarianResourcetradegood1",
+			"js_islandBarbarianResourcetradegood2",
+			"js_islandBarbarianResourcetradegood3",
+			"js_islandBarbarianResourcetradegood4"
+		].reduce((result, it) => result + parseInt(document.getElementById(it).innerHTML), 0)
+		const shipAmount = Math.ceil(resourceAmount / 500)
+
+		// Update View
+		document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 220px;");
+		(<HTMLElement>document.getElementsByClassName("barbarianCityResources")[0]).apply((it) => {
+			it.appendChild(Factory.br())
+			it.appendChild(Factory.div((it) => {
+				it.innerHTML = "Resource Transport:"
+			}))
+			it.appendChild(Factory.ul((it) => {
+				it.className = "resources"
+				it.setAttribute("style", "height: 25px;")
+				it.appendChild(Factory.li((it) => {
+					it.setAttribute("style", 'background: url("skin/wonder/multi_marble.png") no-repeat left center;')
+					it.innerHTML = resourceAmount.toString()
+				}))
+				it.appendChild(Factory.li((it) => {
+					it.setAttribute("style", 'background: url("skin/characters/fleet/40x40/ship_transport_r_40x40.png") no-repeat left center; background-size: 20px;')
+					it.innerHTML = shipAmount.toString()
+				}))
+			}))
+		})
+	})
+}
 
 // List Cities
 // NOTE: let's get a list of cities and coords for player
