@@ -518,6 +518,31 @@ const mutationData = (() => {
 	}
 })()
 
+// Callout Logic
+const calloutCreate = (title: string, content: string) => {
+	document.body.appendChild(Factory.div((it) => {
+		it.className = "extensionCallout small"
+		it.setAttribute("style", "left: 70px; top: 190px;")
+		// NOTE: need to consider width and height
+		//       need to set location in center of page (consider stylesheet and here)
+		it.appendChild(Factory.table((it) => {
+			it.appendChild(Factory.tr((it) => {
+				it.appendChild(Factory.td((it) => {
+					it.innerHTML = title
+				}))
+			}))
+			it.appendChild(Factory.tr((it) => {
+				it.appendChild(Factory.td((it) => {
+					it.innerHTML = content
+				}))
+			}))
+		}))
+	}))
+}
+
+// TEST CALLOUT
+calloutCreate("Extension Options", "CONTENT GOES HERE")
+
 // Parse View
 const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
 // NOTE: is this not available in window data? could this at least use an enum?

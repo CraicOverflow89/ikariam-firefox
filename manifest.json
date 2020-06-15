@@ -1,6 +1,7 @@
 {
 	"content_scripts": [
 		{
+			"css": ["res/styles/app.min.css"],
 			"js": ["res/scripts/app.min.js"],
 			"matches": ["*://*.ikariam.gameforge.com/*"]
 		}
