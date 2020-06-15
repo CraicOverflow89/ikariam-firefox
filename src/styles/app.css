@@ -1,3 +1,57 @@
+/* BANNER
+*/
+
+div.extensionBanner {
+	background: url("skin/layout/bg_breadcrumbs_sprite.png") 0px -56px repeat-x;
+	margin: 0px 28px;
+	padding: 3px 0px;
+	position: absolute;
+	right: 45px;
+	top: 142px;
+	width: auto;
+	z-index: 59;
+}
+
+div.extensionBanner::after {
+	background: url("skin/layout/bg_breadcrumbs_sprite.png") 0px -28px no-repeat;
+	content: "";
+	display: block;
+	height: 28px;
+	position: absolute;
+	right: -27px;
+	top: 0px;
+	width: 27px;
+}
+
+div.extensionBanner::before {
+	background: url("skin/layout/bg_breadcrumbs_sprite.png") 0px 0px no-repeat;
+	content: "";
+	display: block;
+	height: 28px;
+	left: -27px;
+	position: absolute;
+	top: 0px;
+	width: 27px;
+}
+
+div.extensionBanner > span {
+	color: rgb(255, 255, 255);
+	line-height: 24px;
+}
+
+div.extensionBanner > span.link {
+	color: rgb(255, 220, 38);
+	cursor: pointer;
+}
+
+div.extensionBanner > span.link:hover {
+	color: rgb(255, 220, 38);
+	text-decoration: underline;
+}
+
+/* CALLOUT
+*/
+
 div.extensionCallout {
 	box-shadow: 0px 0px 4px rgb(0, 0, 0);
 	margin: 8px 0 0 -8px;

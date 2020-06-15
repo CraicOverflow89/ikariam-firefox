@@ -534,8 +534,16 @@ const calloutCreate = (title: string, content: string, additional: Array<{title:
 	// NOTE: would be best to return {add: () => this, create: () => void}
 	//       so that additional items can be added with type safe arguments instead of object literals
 
+	// Private Properties
+	let isActive = true
+
 	// Create Element
+	let closeLogic = null
 	const element = document.getElementById("container").appendChild(Factory.div((it) => {
+		closeLogic = () => {
+			isActive = false
+			element.remove()
+		}
 		it.className = "extensionCallout small"
 		it.setAttribute("style", "left: 70px; top: 170px;")
 		// NOTE: need to consider width and height
@@ -557,7 +565,7 @@ const calloutCreate = (title: string, content: string, additional: Array<{title:
 						if(isClosable) a.appendChild(Factory.span((it) => {
 							it.className = "indicator"
 							it.style.backgroundPosition = "0 -18px"
-							it.addEventListener("click", () => element.remove())
+							it.addEventListener("click", closeLogic)
 							it.addEventListener("mousedown", (it) => it.stopPropagation())
 						}))
 						if(isShrinkable) a.appendChild(Factory.span((it) => {
@@ -592,20 +600,55 @@ const calloutCreate = (title: string, content: string, additional: Array<{title:
 			})
 		}))
 	}))
+
+	// Return Methods
+	return {
+		"isActive": () => isActive,
+		"close": closeLogic
+	}
 }
 
-// TEST CALLOUT
-calloutCreate("Extension Options", "CONTENT GOES HERE", [
-	{
-		"title": "About",
-		"content": "Version 0.1",
-		"shrinkable": true
+// Option Data
+const optionCallout = (() => {
+	let callout = null
+	const isActive = () => callout !== null && callout.isActive()
+	return {
+		"isActive": isActive,
+		"show": () => {
+			// NOTE: should be performing show/hide in callout instead of creating a new one each time
+			if(isActive()) return;
+			callout = calloutCreate("Extension Options", "CONTENT GOES HERE", [
+				{
+					"title": "About",
+					"content": "Version 0.1",
+					"shrinkable": true
+				}
+			])
+		}
 	}
-])
+})()
 
 // Parse View
 const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
 // NOTE: is this not available in window data? could this at least use an enum?
+
+// Extension Banner
+document.getElementById("container").appendChild(Factory.div((it) => {
+	it.className = "extensionBanner"
+	it.appendChild(Factory.span((it) => {
+		it.innerHTML = "Extension"
+	}))
+	it.appendChild(Factory.span((it) => {
+		it.innerHTML = "&nbsp;&gt;&nbsp;"
+	}))
+	it.appendChild(Factory.span((it) => {
+		it.className = "link"
+		it.innerHTML = "Options"
+		it.addEventListener("click", () => {
+			optionCallout.show()
+		})
+	}))
+}))
 
 // Hide Event Promotion
 document.getElementById("eventDiv").style.display = "none"
