@@ -5,12 +5,8 @@ Playing around with Firefox Extension capabilities and providing some additional
 
 ### Tasks
 
- - need to check if game is active or waiting for login
- - option to remove (some/all of) the left options
- - look into local data of town and UI data
- - fetch data via new ajax request
- - add shortcuts to various screens
- - add new UI (in style of game) with features
+ - add a delete all read reports option for Combat Reports
+ - show info of all troops in all towns at once
 
 ### Issues
 

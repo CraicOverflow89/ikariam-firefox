@@ -1,6 +1,35 @@
 // Library
 
 /**
+ * HTMLElement Extension
+ */
+declare interface HTMLElement {
+	apply(logic: (it: HTMLElement) => void): HTMLElement
+	let(logic: (it: HTMLElement) => any): any
+}
+
+/**
+ * Applies logic to element and returns element
+ *
+ * @param logic Callable logic to execute using element
+ * @returns HTMLElement
+ */
+HTMLElement.prototype.apply = function(logic: (it: HTMLElement) => void): HTMLElement {
+	logic(this)
+	return this
+}
+
+/**
+ * Applies logic to element and returns result
+ *
+ * @param logic Callable logic to execute using element
+ * @returns any
+ */
+HTMLElement.prototype.let = function(logic: (it: HTMLElement) => any): any {
+	return logic(this)
+}
+
+/**
  * Number Extension
  */
 declare interface Number {
@@ -26,54 +55,6 @@ Number.prototype.isInteger = function(): boolean {
 Number.prototype.toPaddedString = function(count: number): string {
 	const result = this.toString()
 	return "0".repeat(count - result.length) + result
-}
-
-/**
- * Object Extension
- */
-declare interface Object {
-	apply(logic: (it: Object) => void): Object
-	let(logic: (it: Object) => any): any
-	when(logic: {}, none: (it: Object) => void | null): void
-}
-
-/**
- * Applies logic to object and returns object
- *
- * @param logic Callable logic to execute using object
- * @returns Object
- */
-Object.prototype.apply = function(logic: (it: Object) => void): Object {
-	logic(this)
-	return this
-}
-
-/**
- * Applies logic to object and returns result
- *
- * @param logic Callable logic to execute using object
- * @returns any
- */
-Object.prototype.let = function(logic: (it: Object) => any): any {
-	return logic(this)
-}
-
-/**
- * Invokes logic of matching condition
- *
- * @param logic Map of condition / result pairs
- * @param none Logic to invoke if no condition is met
- * @returns void
- */
-Object.prototype.when = function(logic: {property: CallableFunction}, none: (it: Object) => void = null): void {
-	const condition = Object.keys(logic)
-	for(let x = 0; x < condition.length; x ++) {
-		if(condition[x] == this) {
-			logic[condition[x]](this)
-			return
-		}
-	}
-	if(none !== null) none(this)
 }
 
 /**
@@ -199,6 +180,16 @@ class Factory {
 	}
 
 	/**
+	 * Creates a new <li> element
+	 *
+	 * @param logic Optional logic to apply to the element
+	 * @returns HTMLLIElement
+	 */
+	static li(logic: (it: HTMLLIElement) => void = () => null): HTMLLIElement {
+		return <HTMLLIElement>document.createElement("li").apply((it: HTMLLIElement) => logic(it))
+	}
+
+	/**
 	 * Creates a new <span> element
 	 *
 	 * @param logic Optional logic to apply to the element
@@ -264,6 +255,16 @@ class Factory {
 	 */
 	static tr(logic: (it: HTMLTableRowElement) => void = () => null): HTMLTableRowElement {
 		return <HTMLTableRowElement>document.createElement("tr").apply((it: HTMLTableRowElement) => logic(it))
+	}
+
+	/**
+	 * Creates a new <ul> element
+	 *
+	 * @param logic Optional logic to apply to the element
+	 * @returns HTMLLIElement
+	 */
+	static ul(logic: (it: HTMLUListElement) => void = () => null): HTMLUListElement {
+		return <HTMLUListElement>document.createElement("ul").apply((it: HTMLUListElement) => logic(it))
 	}
 }
 
@@ -359,7 +360,7 @@ type int = Integer;
 
 // Create Debugger
 // NOTE: object that can be posted to and renders in a modal/popup
-const Debug = (() => {
+/*const Debug = (() => {
 
 	// Active Status
 	let isActive = true
@@ -412,7 +413,7 @@ const Debug = (() => {
 			input.innerHTML += (typeof data == "string" ? data : JSON.stringify(data)) + "<br>"
 		}
 	}
-})()
+})()*/
 
 // Create Definitions
 interface Ikariam {
@@ -442,18 +443,94 @@ class IkariamCity {
 	}
 }
 
-// Execute Application
-console = (() => {
+// Console Logic
+/*console = (() => {
 	const iFrame = document.createElement("iframe")
 	iFrame.style.display = "none"
 	document.body.appendChild(iFrame)
 	const result = iFrame.contentWindow["console"]
 	document.body.removeChild(iFrame)
 	return result
-})()
-console.log("Ikariam application running...")
+})()*/
+
+// Execute Application
+//console.log("Ikariam application running...")
+// NOTE: this is still not working, despite console changes
 
 // NOTE: for general data, see window.ikariam.model
+
+// Mutation Logic
+const mutationData = (() => {
+
+	// Private Properties
+	const listenerData: Array<{id: string, logic: (element: HTMLElement) => void}> = []
+
+	// Create Listener
+	new MutationObserver((mutationsList, observer) => {
+		mutationsList.forEach((it) => {
+			if(it.type === "childList" && it.addedNodes.length) {
+				it.addedNodes.forEach(node => {
+					listenerData.forEach((it) => {
+						if(it.id == node["id"]) {
+							it.logic(document.getElementById(it.id))
+						}
+					})
+				})
+			}
+		})
+	}).observe(document.getElementById("container"), {
+		"attributes": false,
+		"childList": true,
+		"subtree": false
+	})
+
+	// Return Methods
+	return {
+		"onElementAdd": (id: string, logic: (element: HTMLElement) => void) => {
+			listenerData.push({
+				"id": id,
+				"logic": logic
+			})
+		}
+	}
+})()
+
+// Barbarian Village
+mutationData.onElementAdd("barbarianVillage", (it) => {
+
+	// Calculate Resources
+	const resourceInfo = document.getElementsByClassName("barbarianCityResources")[0]
+	const resourceAmount = [
+		"js_islandBarbarianResourceresource",
+		"js_islandBarbarianResourcetradegood1",
+		"js_islandBarbarianResourcetradegood2",
+		"js_islandBarbarianResourcetradegood3",
+		"js_islandBarbarianResourcetradegood4"
+	].reduce((result, it) => {
+		return result + parseInt(document.getElementById(it).innerHTML)
+	}, 0)
+	const shipAmount = Math.ceil(resourceAmount / 500)
+
+	// Update View
+	resourceInfo.appendChild(Factory.br())
+	resourceInfo.appendChild(Factory.div((it) => {
+		it.innerHTML = "Resource Transport:"
+	}))
+	resourceInfo.appendChild(Factory.ul((it) => {
+		it.className = "resources"
+		it.setAttribute("style", "height: 25px;")
+		it.appendChild(Factory.li((it) => {
+			it.setAttribute("style", 'background: url("skin/wonder/multi_marble.png") no-repeat left center;')
+			it.innerHTML = resourceAmount.toString()
+		}))
+		it.appendChild(Factory.li((it) => {
+			it.setAttribute("style", 'background: url("skin/characters/fleet/40x40/ship_transport_r_40x40.png") no-repeat left center; background-size: 20px;')
+			it.innerHTML = shipAmount.toString()
+		}))
+	}))
+	document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 180px;")
+	document.getElementsByClassName("barbarianCityInfosText")[0].setAttribute("style", "height: 50px;")
+})
 
 // Hide Event Promotion
 document.getElementById("eventDiv").style.display = "none"
@@ -474,11 +551,11 @@ if(window.location.href.indexOf("view=city") > -1) {
 
 // List Cities
 // NOTE: let's get a list of cities and coords for player
-const tempCity = ikariam.model.relatedCityData.let((it) => {
+/*const tempCity = ikariam.model.relatedCityData.let((it) => {
 	return it[it["selectedCity"]].let((it) => {
 		return new IkariamCity(it.id, it.name)
 	})
-})
+})*/
 //alert(JSON.stringify(tempCity))
 
 // Create Callout
