@@ -106,6 +106,16 @@ String.prototype.startsWith = function(value: string): boolean {
 class Factory {
 
 	/**
+	 * Creates a new <a> element
+	 *
+	 * @param logic Optional logic to apply to the element
+	 * @returns HTMLAnchorElement
+	 */
+	static a(logic: (it: HTMLAnchorElement) => void = () => null): HTMLAnchorElement {
+		return <HTMLAnchorElement>document.createElement("a").apply((it: HTMLAnchorElement) => logic(it))
+	}
+
+	/**
 	 * Creates a new <br> element
 	 *
 	 * @returns HTMLBRElement
@@ -519,29 +529,79 @@ const mutationData = (() => {
 })()
 
 // Callout Logic
-const calloutCreate = (title: string, content: string) => {
-	document.body.appendChild(Factory.div((it) => {
+const calloutCreate = (title: string, content: string, additional: Array<{title: string, content: string, shrinkable: boolean}> = []) => {
+
+	// NOTE: would be best to return {add: () => this, create: () => void}
+	//       so that additional items can be added with type safe arguments instead of object literals
+
+	// Create Element
+	const element = document.getElementById("container").appendChild(Factory.div((it) => {
 		it.className = "extensionCallout small"
-		it.setAttribute("style", "left: 70px; top: 190px;")
+		it.setAttribute("style", "left: 70px; top: 170px;")
 		// NOTE: need to consider width and height
 		//       need to set location in center of page (consider stylesheet and here)
-		it.appendChild(Factory.table((it) => {
-			it.appendChild(Factory.tr((it) => {
-				it.appendChild(Factory.td((it) => {
-					it.innerHTML = title
+		it.appendChild(Factory.ul((it) => {
+
+			// Item Logic
+			const addElement = (title: string, content: string, isClosable: boolean, isShrinkable: boolean) => {
+				it.appendChild(Factory.li((it) => {
+					it.className = "accordionItem"
+					const contentElement = Factory.div((it) => {
+						it.className = "accordionContent"
+						it.innerHTML = content
+					})
+					it.appendChild(Factory.a((a) => {
+						a.className = "accordionTitle active"
+						a.setAttribute("style", "cursor: default;")
+						a.innerHTML = title
+						if(isClosable) a.appendChild(Factory.span((it) => {
+							it.className = "indicator"
+							it.style.backgroundPosition = "0 -18px"
+							it.addEventListener("click", () => element.remove())
+							it.addEventListener("mousedown", (it) => it.stopPropagation())
+						}))
+						if(isShrinkable) a.appendChild(Factory.span((it) => {
+							it.className = "indicator"
+							it.addEventListener("click", () => {
+
+								// Hiding Content
+								if(a.className.indexOf("active") > -1) {
+									contentElement.style.display = "none"
+									a.className = "accordionTitle"
+								}
+
+								// Showing Content
+								else {
+									contentElement.style.display = "block"
+									a.className = "accordionTitle active"
+								}
+							})
+							it.addEventListener("mousedown", (it) => it.stopPropagation())
+						}))
+					}))
+					it.appendChild(contentElement)
 				}))
-			}))
-			it.appendChild(Factory.tr((it) => {
-				it.appendChild(Factory.td((it) => {
-					it.innerHTML = content
-				}))
-			}))
+			}
+
+			// Main Element
+			addElement(title, content, true, false)
+
+			// Additional Elements
+			additional.forEach((item) => {
+				addElement(item.title, item.content, false, item.shrinkable)
+			})
 		}))
 	}))
 }
 
 // TEST CALLOUT
-calloutCreate("Extension Options", "CONTENT GOES HERE")
+calloutCreate("Extension Options", "CONTENT GOES HERE", [
+	{
+		"title": "About",
+		"content": "Version 0.1",
+		"shrinkable": true
+	}
+])
 
 // Parse View
 const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]

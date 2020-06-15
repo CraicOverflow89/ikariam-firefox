@@ -1,31 +1,15 @@
 div.extensionCallout {
+	box-shadow: 0px 0px 4px rgb(0, 0, 0);
+	margin: 8px 0 0 -8px;
 	position: absolute;
 	z-index: 99;
 }
 
-div.extensionCallout.small {
+div.extensionCallout > ul {
+	padding-bottom: 3px;
+}
+
+div.extensionCallout.small > ul {
+	background: url("skin/layout/bg_sidebox_footer.png") no-repeat scroll left bottom transparent;
 	width: 228px;
-}
-
-div.extensionCallout > table {
-	background-color: rgb(250, 243, 215);
-	height: 100%;
-	width: 100%;
-}
-div.extensionCallout > table > tbody > tr > td {
-	padding: 5px;
-}
-
-div.extensionCallout > table > tbody > tr:first-child > td {
-	font-weight: 700;
-	line-height: 20px;
-	text-align: center;
-}
-
-div.extensionCallout.small > table > tbody > tr > td {
-	background: url("skin/layout/bg_sidebox.png") repeat-y;
-}
-
-div.extensionCallout.small > table > tbody > tr:first-child > td {
-	background: url("skin/layout/bg_sidebox_header.jpg") no-repeat;
 }
