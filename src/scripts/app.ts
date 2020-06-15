@@ -499,37 +499,35 @@ const mutationData = (() => {
 mutationData.onElementAdd("barbarianVillage", (it) => {
 
 	// Calculate Resources
-	const resourceInfo = document.getElementsByClassName("barbarianCityResources")[0]
 	const resourceAmount = [
 		"js_islandBarbarianResourceresource",
 		"js_islandBarbarianResourcetradegood1",
 		"js_islandBarbarianResourcetradegood2",
 		"js_islandBarbarianResourcetradegood3",
 		"js_islandBarbarianResourcetradegood4"
-	].reduce((result, it) => {
-		return result + parseInt(document.getElementById(it).innerHTML)
-	}, 0)
+	].reduce((result, it) => result + parseInt(document.getElementById(it).innerHTML), 0)
 	const shipAmount = Math.ceil(resourceAmount / 500)
 
 	// Update View
-	resourceInfo.appendChild(Factory.br())
-	resourceInfo.appendChild(Factory.div((it) => {
-		it.innerHTML = "Resource Transport:"
-	}))
-	resourceInfo.appendChild(Factory.ul((it) => {
-		it.className = "resources"
-		it.setAttribute("style", "height: 25px;")
-		it.appendChild(Factory.li((it) => {
-			it.setAttribute("style", 'background: url("skin/wonder/multi_marble.png") no-repeat left center;')
-			it.innerHTML = resourceAmount.toString()
+	document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 220px;");
+	(<HTMLElement>document.getElementsByClassName("barbarianCityResources")[0]).apply((it) => {
+		it.appendChild(Factory.br())
+		it.appendChild(Factory.div((it) => {
+			it.innerHTML = "Resource Transport:"
 		}))
-		it.appendChild(Factory.li((it) => {
-			it.setAttribute("style", 'background: url("skin/characters/fleet/40x40/ship_transport_r_40x40.png") no-repeat left center; background-size: 20px;')
-			it.innerHTML = shipAmount.toString()
+		it.appendChild(Factory.ul((it) => {
+			it.className = "resources"
+			it.setAttribute("style", "height: 25px;")
+			it.appendChild(Factory.li((it) => {
+				it.setAttribute("style", 'background: url("skin/wonder/multi_marble.png") no-repeat left center;')
+				it.innerHTML = resourceAmount.toString()
+			}))
+			it.appendChild(Factory.li((it) => {
+				it.setAttribute("style", 'background: url("skin/characters/fleet/40x40/ship_transport_r_40x40.png") no-repeat left center; background-size: 20px;')
+				it.innerHTML = shipAmount.toString()
+			}))
 		}))
-	}))
-	document.getElementsByClassName("barbarianCityInfos")[0].setAttribute("style", "height: 180px;")
-	document.getElementsByClassName("barbarianCityInfosText")[0].setAttribute("style", "height: 50px;")
+	})
 })
 
 // Hide Event Promotion
