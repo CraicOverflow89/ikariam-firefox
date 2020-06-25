@@ -493,6 +493,16 @@ class LocalStorage {
 	}
 
 	/**
+	 * Detemines if a key exists in local storage
+	 *
+	 * @param key The key to check
+	 * @returns boolean
+	 */
+	static exists(key: string): boolean {
+		return localStorage.getItem(key) != null
+	}
+
+	/**
 	 * Gets data from local storage
 	 *
 	 * @param key The key to fetch
@@ -667,6 +677,10 @@ const optionCallout = (() => {
 // Load Config
 // NOTE if not exists local storage of config then create with defaults
 //      else load data and implement that into the loaded config
+const config = {
+	"addBarbarianResources" : true,
+	"hideTownNavigation": true
+}
 
 // Parse View
 const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
