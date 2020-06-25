@@ -702,6 +702,25 @@ document.getElementById("container").appendChild(Factory.div((it) => {
 			optionCallout.show()
 		})
 	}))
+	it.appendChild(Factory.span((it) => {
+		it.innerHTML = "&nbsp;&nbsp;&nbsp;"
+	}))
+	it.appendChild(Factory.a((it) => {
+		it.appendChild(Factory.img("../images/game/scroll_open2.png", (it) => {
+			it.className = "link"
+		}))
+		it.appendChild(Factory.span((it) => {
+			it.innerHTML = "&nbsp;&nbsp;&nbsp;"
+		}))
+		it.appendChild(Factory.span((it) => {
+			it.className = "link"
+			it.innerHTML = "Notes"
+		}))
+		it.addEventListener("click", () => {
+			// NOTE: show the new Notes dialog
+			alert("Extension Notes")
+		})
+	}))
 }))
 
 // Hide Event Promotion
