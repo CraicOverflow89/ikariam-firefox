@@ -2,7 +2,7 @@
 */
 
 div.extensionBanner {
-	background: url("../images/skins/bg_breadcrumbs_sprite.png") 0px -56px repeat-x;
+	background: url("../images/game/bg_breadcrumbs_sprite.png") 0px -56px repeat-x;
 	margin: 0px 28px;
 	padding: 3px 0px;
 	position: absolute;
@@ -13,7 +13,7 @@ div.extensionBanner {
 }
 
 div.extensionBanner::after {
-	background: url("../images/skins/bg_breadcrumbs_sprite.png") 0px -28px no-repeat;
+	background: url("../images/game/bg_breadcrumbs_sprite.png") 0px -28px no-repeat;
 	content: "";
 	display: block;
 	height: 28px;
@@ -24,7 +24,7 @@ div.extensionBanner::after {
 }
 
 div.extensionBanner::before {
-	background: url("../images/skins/bg_breadcrumbs_sprite.png") 0px 0px no-repeat;
+	background: url("../images/game/bg_breadcrumbs_sprite.png") 0px 0px no-repeat;
 	content: "";
 	display: block;
 	height: 28px;
