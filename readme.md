@@ -15,6 +15,7 @@ Extension options are accessible from the new banner under advisors;
 
 ### Tasks
 
+ - extend the existing Notes feature with categories (utilising `localStorage`)
  - add a delete all read reports option for Combat Reports
  - show info of all troops in all towns at once
  - all ongoing building summary data
