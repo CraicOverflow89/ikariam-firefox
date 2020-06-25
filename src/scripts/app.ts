@@ -478,6 +478,42 @@ interface IkariamViewSideMenuVisibility {
 	slot4: number
 }*/
 
+// Storage Data
+class LocalStorage {
+
+	/**
+	 * Adds data to local storage
+	 *
+	 * @param key The key to use
+	 * @param value The value to store
+	 * @returns void
+	 */
+	static add(key: string, value: string): void {
+		localStorage.setItem(key, value)
+	}
+
+	/**
+	 * Gets data from local storage
+	 *
+	 * @param key The key to fetch
+	 * @returns string
+	 */
+	static get(key: string): string {
+		return localStorage.getItem(key)
+	}
+
+	/**
+	 * Removes data from local storage
+	 *
+	 * @param key The key to remove
+	 * @returns string
+	 */
+	static remove(key: string): void {
+		localStorage.removeItem(key)
+	}
+
+}
+
 // Declare Constants
 //declare const ikariam: Ikariam
 //declare const bgViewData: IkariamView
@@ -627,6 +663,10 @@ const optionCallout = (() => {
 		}
 	}
 })()
+
+// Load Config
+// NOTE if not exists local storage of config then create with defaults
+//      else load data and implement that into the loaded config
 
 // Parse View
 const viewType = window.location.href.match(/view=[a-z]+/)[0].split("=")[1]
